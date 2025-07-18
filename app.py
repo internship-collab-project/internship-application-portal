@@ -1,11 +1,14 @@
-from flask import Flask
-from models import db
+from fastapi import FastAPI
+from .database import Base, engine
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://your_user:your_pass@localhost/your_db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Import all models to register them with Base
+from . import models
 
-db.init_app(app)
+app = FastAPI()
 
-if __name__ == "__main__":
-    app.run()
+@app.get("/")
+def root():
+    return {"message": "Internship portal API is running"}
+
+# Create tables
+Base.metadata.create_all(bind=engine)

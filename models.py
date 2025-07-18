@@ -1,46 +1,41 @@
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, String, Text, Date, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from datetime import datetime
+from .database import Base
 
-db = SQLAlchemy()
-
-# Applicant Login Credentials
-class ApplicantAuth(db.Model):
+class ApplicantAuth(Base):
     __tablename__ = 'applicant_auth'
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(128), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, nullable=False)
+    password_hash = Column(String, nullable=False)
 
-# Admin Login Credentials
-class AdminAuth(db.Model):
+class AdminAuth(Base):
     __tablename__ = 'admin_auth'
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(128), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, nullable=False)
+    password_hash = Column(String, nullable=False)
 
-# Applicant Info
-class ApplicantInfo(db.Model):
+class ApplicantInfo(Base):
     __tablename__ = 'applicant_info'
-    id = db.Column(db.Integer, primary_key=True)
-    auth_id = db.Column(db.Integer, db.ForeignKey('applicant_auth.id', ondelete='CASCADE'), unique=True, nullable=False)
-    name = db.Column(db.String(128), nullable=False)
-    gpa = db.Column(db.Numeric(3, 2))
-    graduation_date = db.Column(db.Date)
-    experience = db.Column(db.Text)
-    resume_url = db.Column(db.String(256))
+    id = Column(Integer, primary_key=True)
+    auth_id = Column(Integer, ForeignKey('applicant_auth.id', ondelete='CASCADE'), unique=True, nullable=False)
+    name = Column(String, nullable=False)
+    gpa = Column(String)
+    graduation_date = Column(Date)
+    experience = Column(Text)
+    resume_url = Column(String)
 
-# Admin Info
-class AdminInfo(db.Model):
+class AdminInfo(Base):
     __tablename__ = 'admin_info'
-    id = db.Column(db.Integer, primary_key=True)
-    auth_id = db.Column(db.Integer, db.ForeignKey('admin_auth.id', ondelete='CASCADE'), unique=True, nullable=False)
-    name = db.Column(db.String(128), nullable=False)
-    department = db.Column(db.String(128))
+    id = Column(Integer, primary_key=True)
+    auth_id = Column(Integer, ForeignKey('admin_auth.id', ondelete='CASCADE'), unique=True, nullable=False)
+    name = Column(String)
+    department = Column(String)
 
-# Job Listings
-class JobListing(db.Model):
+class JobListing(Base):
     __tablename__ = 'job_listings'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(128), nullable=False)
-    description = db.Column(db.Text)
-    posted_at = db.Column(db.DateTime, default=datetime.utcnow)
-    deadline = db.Column(db.Date)
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    description = Column(Text)
+    posted_at = Column(DateTime, default=datetime.utcnow)
+    deadline = Column(Date)
