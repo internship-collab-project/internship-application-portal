@@ -1,66 +1,79 @@
-# === schemas.py ===
-from pydantic import BaseModel, EmailStr, constr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
-from datetime import date, datetime
+from datetime import datetime
 
-# --- Applicant Auth ---
-class ApplicantAuthCreate(BaseModel):
+# User Schema
+
+class UserBase(BaseModel):
     email: EmailStr
-    password: constr(min_length=8)
+    is_admin: bool = False
 
-class ApplicantAuthResponse(BaseModel):
-    id: int
-    email: EmailStr
 
-    class Config:
-        orm_mode = True
+class UserCreate(UserBase):
+    password: str
 
-# --- Admin Auth ---
-class AdminAuthCreate(BaseModel):
-    email: EmailStr
-    password: constr(min_length=8)
 
-class AdminAuthResponse(BaseModel):
-    id: int
-    email: EmailStr
-
-    class Config:
-        orm_mode = True
-
-# --- Applicant Info ---
-class ApplicantInfoCreate(BaseModel):
-    name: str
-    gpa: Optional[float]
-    graduation_date: Optional[date]
-    experience: Optional[str]
-    resume_url: Optional[str]
-
-class ApplicantInfoResponse(ApplicantInfoCreate):
+class UserResponse(UserBase):
     id: int
 
     class Config:
         orm_mode = True
 
-# --- Admin Info ---
-class AdminInfoCreate(BaseModel):
-    name: str
-    department: Optional[str]
+# Profile Schema (for autofill)
 
-class AdminInfoResponse(AdminInfoCreate):
+class ProfileBase(BaseModel):
+    full_name: str
+    major: str
+    graduation_date: str
+    gpa: float
+    resume_link: str
+    experience: Optional[str] = None
+
+
+class ProfileCreate(ProfileBase):
+    pass
+
+
+class ProfileResponse(ProfileBase):
     id: int
+    user_id: int
 
     class Config:
         orm_mode = True
 
-# --- Job Listings ---
-class JobListingCreate(BaseModel):
+# Job Listing Schema
+
+class JobListingBase(BaseModel):
     title: str
-    description: Optional[str]
-    deadline: Optional[date]
+    description: str
+    requirements: str
 
-class JobListingResponse(JobListingCreate):
+
+class JobListingCreate(JobListingBase):
+    pass
+
+
+class JobListingResponse(JobListingBase):
     id: int
-    posted_at: datetime
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+# Application Schema
+
+class ApplicationBase(BaseModel):
+    job_id: int
+
+
+class ApplicationCreate(ApplicationBase):
+    pass
+
+
+class ApplicationResponse(ApplicationBase):
+    id: int
+    user_id: int
+    applied_at: datetime
 
     class Config:
         orm_mode = True

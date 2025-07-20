@@ -1,41 +1,51 @@
-from sqlalchemy import Column, Integer, String, Text, Date, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Date, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from .database import Base
+from app.db import Base
 
-class ApplicantAuth(Base):
-    __tablename__ = 'applicant_auth'
+class User(Base):
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, nullable=False)
-    password_hash = Column(String, nullable=False)
+    username = Column(String, unique=True, index=True)
+    password = Column(String)
+    role = Column(String, default="applicant")  # admin, reviewer, applicant
 
-class AdminAuth(Base):
-    __tablename__ = 'admin_auth'
+    profile = relationship("Profile", uselist=False, back_populates="user")
+    applications = relationship("Application", back_populates="user")
+
+
+class Profile(Base):
+    __tablename__ = "profiles"
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, nullable=False)
-    password_hash = Column(String, nullable=False)
-
-class ApplicantInfo(Base):
-    __tablename__ = 'applicant_info'
-    id = Column(Integer, primary_key=True)
-    auth_id = Column(Integer, ForeignKey('applicant_auth.id', ondelete='CASCADE'), unique=True, nullable=False)
-    name = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String)
     gpa = Column(String)
     graduation_date = Column(Date)
     experience = Column(Text)
-    resume_url = Column(String)
+    resume = Column(String)  # path to uploaded file
 
-class AdminInfo(Base):
-    __tablename__ = 'admin_info'
-    id = Column(Integer, primary_key=True)
-    auth_id = Column(Integer, ForeignKey('admin_auth.id', ondelete='CASCADE'), unique=True, nullable=False)
-    name = Column(String)
-    department = Column(String)
+    user = relationship("User", back_populates="profile")
 
-class JobListing(Base):
-    __tablename__ = 'job_listings'
-    id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)
-    description = Column(Text)
-    posted_at = Column(DateTime, default=datetime.utcnow)
-    deadline = Column(Date)
+
+class Job(Base):
+    __tablename__ = "jobs"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    description = Column(String)
+    category = Column(String)
+    location = Column(String)
+    deadline = Column(String)
+
+    applications = relationship("Application", back_populates="job")
+
+
+class Application(Base):
+    __tablename__ = "applications"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))  # ForeignKey to pull profile info
+    job_id = Column(Integer, ForeignKey("jobs.id"))
+    status = Column(String, default="Pending")  # Pending, Accepted, Rejected
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="applications")
+    job = relationship("Job", back_populates="applications")
