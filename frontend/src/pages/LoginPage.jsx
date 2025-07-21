@@ -40,24 +40,29 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(''); // Reset error state before making the request
+        
+        // Temporary: Mock API response for testing purposes (will remove when backend is ready)
         try {
-            const response = await Axios.post('/login', formData, JSON.stringify(formData), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    withCredentials: true // Ensure cookies are sent with the request
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Mock successful response
+            const response = {
+                data: {
+                    accessToken: 'mock-jwt-token-12345',
+                    roles: ['user'],
+                    message: 'Login successful'
                 }
-            });
-            //make sure to have the api endpoint set up to handle this request and make sure it accepts specificly the email and password fields
+            };
 
             console.log('Login successful:', response.data);
-            const accessToken = response?.data?.accessToken; // Assuming the API returns an access token
-            const roles = response?.data?.roles; // Assuming the API returns user roles
+            const accessToken = response?.data?.accessToken;
+            const roles = response?.data?.roles;
             
             // Use the login function (it handles localStorage automatically)
             login({ email: formData.email, roles, accessToken });
             setFormData({ email: '', password: '' }); // Clear form after successful login
             navigate('/dashboard'); // Redirect to the dashboard or another page after successful login
-
 
         } catch (err) {
             // Handle login error
