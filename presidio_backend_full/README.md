@@ -1,5 +1,14 @@
-# Presidio Job Application Portal – Backend
+# Presidio Job Application Backend
 
-This repository contains the **backend API** for the Presidio Job Application Portal. It was developed as part of a group project to enable applicants to **view job listings**, **submit applications with resumes**, and allow admins to **manage jobs and applications**.
+## Features
+- User Authentication (JWT)
+- Role-based Access (Admin vs Applicant)
+- Job Management (Create/View)
+- Profiles (Create/Update/View with PDF Resume)
+- Applications (Autofill from Profile)
+- Email Notifications (Accept/Reject)
 
-(Complete README content already shared above.)
+## Setup
+1. Install dependencies:
+```bash
+pip install -r requirements.txt

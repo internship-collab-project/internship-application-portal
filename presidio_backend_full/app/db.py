@@ -6,6 +6,7 @@ DATABASE_URL = "sqlite:///./presidio.db"
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+
 Base = declarative_base()
 
 # Dependency for DB session
@@ -15,3 +16,4 @@ def get_db():
         yield db
     finally:
         db.close()
+        
