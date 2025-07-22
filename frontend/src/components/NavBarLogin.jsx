@@ -12,7 +12,7 @@ const NavBarLogin = () => {
             
             {/* Navigation links on the right */}
             <div className="flex space-x-10">
-                <NavLink className="text-gray-600 hover:text-gray-800 text-lg" to="/login">
+                <NavLink className="text-gray-600 hover:text-gray-800 text-lg" to="/">
                     Login
                 </NavLink>
                 <NavLink className="text-gray-600 hover:text-gray-800 text-lg" to="/signup">
