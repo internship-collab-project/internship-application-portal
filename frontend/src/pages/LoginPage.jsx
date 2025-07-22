@@ -1,36 +1,23 @@
-import { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState } from 'react';
 import Axios from '../services/Axios';
 import { useNavigate, NavLink } from 'react-router-dom';
 import NavBarLogin from '../components/NavBarLogin';
-import AuthContext from '../context/AuthProvider';
+import useAuth from '../hooks/useAuth';
 
 const LoginPage = () => {
-    const {setAuth, login} = useContext(AuthContext);
-    // const userRef = useRef();
+    const {setAuth, login} = useAuth(); //global auth 
+
+    const navigate = useNavigate();
+
     const errRef = useRef();
 
-    // // State to hold form data
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
-    // // const [validEmail, setValidEmail] = useState(false);
-    // // const [validPassword, setValidPassword] = useState(false);
-    // const [errMsg, setErrMsg] = useState('');
-    // const [success, setSuccess] = useState(false); //after a successful login we need to redirect the user to the dashboard
 
-    // useEffect(() => {
-    //     userRef.current.focus();
-    // }, []); // Focus on the email input when the component mounts
-
-    // useEffect(() => {
-    //     setErrMsg('');
-    // }, [email, password]); // Reset error message when email or password changes
 
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
     const [error, setError] = useState('');
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,28 +28,46 @@ const LoginPage = () => {
         e.preventDefault();
         setError(''); // Reset error state before making the request
         
-        // Temporary: Mock API response for testing purposes (will remove when backend is ready)
-        try {
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
+        // // Temporary: Mock API response for testing purposes (will remove when backend is ready)
+        // try {
+        //     // Simulate API delay
+        //     await new Promise(resolve => setTimeout(resolve, 1000));
             
-            // Mock successful response
-            const response = {
-                data: {
-                    accessToken: 'mock-jwt-token-12345',
-                    roles: ['user'],
-                    message: 'Login successful'
-                }
-            };
+        //     // Mock successful response
+        //     const response = {
+        //         data: {
+        //             accessToken: 'mock-jwt-token-12345',
+        //             roles: ['admin'], // or ['applicant'] for applicant role
+        //             message: 'Login successful'
+        //             }
+        //         };
+        
+        //     // Use the login function (it handles localStorage automatically)
+        //     login({ email: formData.email, roles: response.data.roles, accessToken: response.data.accessToken });
+        //     setFormData({ email: '', password: '' }); // Clear form after successful login
 
-            console.log('Login successful:', response.data);
-            const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
-            
-            // Use the login function (it handles localStorage automatically)
+        //     if (response.data.roles.includes('admin')) {
+        //         navigate('/adminDashboard'); // Redirect to admin dashboard if user is an admin
+        //     } else if (response.data.roles.includes('applicant')) {
+        //         navigate('/applicantDashboard'); // Redirect to user dashboard if user is an applicant
+        //     }
+        
+        // }
+        //    catch (error) {
+        //     setError('Login failed.');  } 
+
+
+        try{
+            const response = await Axios.post('/login', formData);
+            const {accessToken, roles} = response.data;
             login({ email: formData.email, roles, accessToken });
             setFormData({ email: '', password: '' }); // Clear form after successful login
-            navigate('/dashboard'); // Redirect to the dashboard or another page after successful login
+            if (roles.includes('admin')) {
+                navigate('/adminDashboard'); // Redirect to admin dashboard if user is an admin
+            }
+            else if (roles.includes('applicant')) {
+                navigate('/applicantDashboard'); // Redirect to user dashboard if user is an applicant
+            }
 
         } catch (err) {
             // Handle login error
@@ -78,7 +83,7 @@ const LoginPage = () => {
             }
             errRef.current.focus(); // Focus on the error message reference if you have one to have a screen reader read it
         }
-    };
+     };
 
     return (
         <>
