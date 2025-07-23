@@ -2,8 +2,8 @@ import {useRef, useState, useEffect } from 'react';
 import NavBarLogin from '../components/NavBarLogin';
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { useNavigate } from 'react-router-dom';
-//import Axios from '../services/Axios';
+import { useNavigate } from 'react-router-dom';
+import Axios from '../services/Axios';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/; //will be validating components with these fields
@@ -12,6 +12,7 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,}
 const SignUpPage = () => {
     const emailRef = useRef();
     const errRef = useRef();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
@@ -63,6 +64,8 @@ const SignUpPage = () => {
             setPassword('');
             setMatchPassword('');
             setSuccess(true);
+            setTimeout(() => navigate('/login'), 1500); // 1.5 seconds delay
+            navigate('/'); // Redirect to login page after successful signup
         } catch (err) {
             if (!err?.response) {
                 setErrMsg("No Server Response");
