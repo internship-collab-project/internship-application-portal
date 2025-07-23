@@ -42,3 +42,31 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+
+#ignore virtual environment
+venv/
+
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg
+*.egg-info/
+*.manifest
+*.spec
+
+# Python build
+build/
+dist/
+*.egg-info/
+
+# SQLite and other temp DBs
+*.sqlite3
+
+# Coverage / testing
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+pytest_cache/
