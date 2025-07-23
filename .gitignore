@@ -42,3 +42,10 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+
+#vite cache
+.vite/
+
+#ignore virtual environments
+venv/
+
