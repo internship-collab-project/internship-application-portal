@@ -33,7 +33,7 @@ A full-stack, web-based portal that streamlines internship applications and mana
   - Major
   - Phone Number
   - Email Address
-  - University
+  - College/University
 
 #### 📄 Application Form
 - View available internship job listings
