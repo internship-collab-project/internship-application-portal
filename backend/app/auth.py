@@ -45,11 +45,20 @@ def signup(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
 
     return user
 
+# @router.post("/login", response_model=schemas.Token)
+# def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+#     user = crud.authenticate_user(db, form_data.username, form_data.password)
+#     if not user:
+#         raise HTTPException(status_code=401, detail="Invalid credentials")
+#     roles = [user.role]
+#     token = create_access_token({"sub": user.email, "roles": roles})
+#     return {"accessToken": token, "roles": roles}
 @router.post("/login", response_model=schemas.Token)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = crud.authenticate_user(db, form_data.username, form_data.password)
+def login(request: schemas.LoginData, db: Session = Depends(get_db)):
+    user = crud.authenticate_user(db, request.email, request.password)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
+
     roles = [user.role]
     token = create_access_token({"sub": user.email, "roles": roles})
     return {"accessToken": token, "roles": roles}

@@ -64,8 +64,7 @@ const SignUpPage = () => {
             setPassword('');
             setMatchPassword('');
             setSuccess(true);
-            setTimeout(() => navigate('/login'), 1500); // 1.5 seconds delay
-            navigate('/'); // Redirect to login page after successful signup
+            setTimeout(() => navigate('/'), 1500); // 1.5 seconds delay
         } catch (err) {
             if (!err?.response) {
                 setErrMsg("No Server Response");

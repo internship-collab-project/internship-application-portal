@@ -81,7 +81,9 @@ const LoginPage = () => {
             else {
                 setError('Login failed. Please try again later.');
             }
-            errRef.current.focus(); // Focus on the error message reference if you have one to have a screen reader read it
+            if (errRef.current) {
+                errRef.current.focus(); // Focus on the error message reference if you have one to have a screen reader read it
+            }
         }
      };
 
