@@ -4,6 +4,7 @@ import SignUpPage from './pages/SignUpPage.jsx';
 import ApplicantDashboard from './pages/ApplicantDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import RequireAuth from './components/RequireAuth.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
 
 const App = () => {
 
@@ -25,6 +26,8 @@ const App = () => {
         <Route element={<RequireAuth allowedRoles={['admin']} />}>
             <Route path="/adminDashboard" element={<AdminDashboard />} />
         </Route>
+        {/* Catch-all route for 404 Not Found */}
+        <Route path="*" element={<NotFoundPage />} />
       </>
     )
   );
