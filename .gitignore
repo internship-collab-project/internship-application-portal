@@ -43,6 +43,7 @@ coverage/
 tmp/
 temp/
 
+
 #ignore virtual environment
 venv/
 
@@ -60,9 +61,6 @@ build/
 dist/
 *.egg-info/
 
-# SQLite and other temp DBs
-*.sqlite3
-
 # Coverage / testing
 htmlcov/
 .tox/
@@ -70,3 +68,7 @@ htmlcov/
 .coverage
 .cache
 pytest_cache/
+
+#vite cache
+.vite/
+
