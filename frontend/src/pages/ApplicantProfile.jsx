@@ -103,19 +103,25 @@ const handleFormSubmit = async (e) => {
         formDataToSend.append('major', formData.major);
         formDataToSend.append('graduation_date', formData.graduation_date);
 
-        if (formData.resume) {
-            formDataToSend.append('resume', formData.resume); // Append the resume file if it exists
+        // if (formData.resume) {
+        //     formDataToSend.append('resume', formData.resume); // Append the resume file if it exists
+        const resumeFile = formData.resume; // Get the resume file from formData
+        if (resumeFile){
+            formDataToSend.append('resume', resumeFile); // Append the resume file if it exists
         }
         if (profileExists) {
             // Update existing profile
             await Axios.put(`/applicantProfile/${applicantID}`, formDataToSend);
         } else {
             // Create new profile
-            await Axios.post('/applicantProfile', formDataToSend);
+            const response = await Axios.post('/applicantProfile', formDataToSend);
+            localStorage.setItem('applicantID', response.data.id); // Save new applicant ID
+            setProfileExists(true);
+            setFormData(response.data); // Prefill form with returned data
             console.log('Profile created successfully');
         }
         setIsEditing(false); // Set isEditing to false after successful submission
-        navigate('/applicantDashboard'); // Redirect to applicant dashboard after successful submission
+        //navigate('/applicantDashboard'); // Redirect to applicant dashboard after successful submission
     } catch (error) {
         console.error('Error submitting form:', error);
     }

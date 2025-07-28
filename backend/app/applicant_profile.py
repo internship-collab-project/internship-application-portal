@@ -62,13 +62,42 @@ async def create_applicant_profile(
 
 # Endpoint to update applicant profile by id
 @router.put("/applicantProfile/id/{id}", response_model=schemas.ApplicantProfileOut)
-def update_applicant_profile(id: int, profile: schemas.UpdateApplicantProfile, db: Session = Depends(get_db)):
+def update_applicant_profile( #none makes the field optional
+    id: int,
+    email: str = Form(None),
+    first_name: str = Form(None),
+    last_name: str = Form(None),
+    phone_number: str = Form(None),
+    university: str = Form(None),
+    major: str = Form(None),
+    graduation_date: date = Form(None),
+    resume: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
     db_profile = db.query(models.ApplicantProfile).filter(models.ApplicantProfile.id == id).first()
     if not db_profile:
         raise HTTPException(status_code=404, detail="Profile not found")
-    # Update fields
-    for field, value in profile.model_dump(exclude_unset=True).items():
-        setattr(db_profile, field, value)
+    
+    # Update fields if provided
+    # if email:
+    #     db_profile.email = email //dont update email for now, it should be immutable after creation to avoid issues with user lookup and authentication/authorization
+    if first_name is not None:
+        db_profile.first_name = first_name
+    if last_name is not None:
+        db_profile.last_name = last_name
+    if phone_number is not None:
+        db_profile.phone_number = phone_number
+    if university is not None:
+        db_profile.university = university
+    if major is not None:
+        db_profile.major = major
+    if graduation_date is not None:
+        db_profile.graduation_date = graduation_date
+    if resume is not None:
+        # Handle file upload logic here if needed, for now will set to None
+        pass  # Placeholder for file handling logic
+
     db.commit()
     db.refresh(db_profile)
+    
     return db_profile

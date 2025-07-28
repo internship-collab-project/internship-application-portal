@@ -33,7 +33,7 @@ class ApplicantProfileCreate(BaseModel):
     phone_number: str
     university: str
     major: str
-    graduation_date: str
+    graduation_date: date
    # resume: Optional[str] = None #can exclude because pydantic does not deal with file uploads directly
 
 #for updating an application

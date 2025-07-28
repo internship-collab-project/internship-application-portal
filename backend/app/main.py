@@ -10,9 +10,6 @@ from . import models, schemas, crud, auth
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-@app.get("/") # Root endpoint for testing
-def read_root():
-    return {"Hello": "World"}
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,6 +18,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/") # Root endpoint for testing
+def read_root():
+    return {"message": "Welcome to the Internship Portal API"}
+
+
 
 # Include auth router (must be after app = FastAPI() but before protected routes)
 app.include_router(auth.router)
