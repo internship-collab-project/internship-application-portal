@@ -25,17 +25,33 @@ class LoginData(BaseModel):
     password: str
 
 # --- Profile ---
-class ProfileBase(BaseModel):
-    name: Optional[str]
-    gpa: Optional[str]
+#for creating a profile
+class ApplicantProfileCreate(BaseModel):
+    email: EmailStr
+    first_name: str
+    last_name: str
+    phone_number: str
+    university: str
+    major: str
+    graduation_date: str
+   # resume: Optional[str] = None #can exclude because pydantic does not deal with file uploads directly
+
+#for updating an application
+class UpdateApplicantProfile(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    phone_number: Optional[str]
+    university: Optional[str]
+    major: Optional[str]
     graduation_date: Optional[date]
-    experience: Optional[str]
-    resume: Optional[str]
+    # resume: Optional[str] = None  # can exclude because pydantic does not deal with file uploads directly
 
-class ProfileCreate(ProfileBase):
-    pass
+# class ApplicantProfileCreate(ApplicantProfileBase): 
+#     # frontend can send this to create a profile
+#     pass
 
-class ProfileOut(ProfileBase):
+class ApplicantProfileOut(ApplicantProfileCreate):
+    # used to return profile data from the backend to the frontend
     id: int
     user_id: int
     class Config:

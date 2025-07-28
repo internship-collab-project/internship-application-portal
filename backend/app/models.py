@@ -10,20 +10,25 @@ class User(Base):
     password = Column(String, nullable=False)
     role     = Column(String, default="applicant", nullable=False)  # applicant or admin
 
-    profile      = relationship("Profile", uselist=False, back_populates="user", cascade="all, delete-orphan")
+    applicant_profile = relationship("ApplicantProfile", uselist=False, back_populates="user", cascade="all, delete-orphan")
     applications = relationship("Application", back_populates="user", cascade="all, delete-orphan")
 
-class Profile(Base):
-    __tablename__ = "profiles"
+
+class ApplicantProfile(Base):
+    __tablename__ = "applicant_profiles"
     id              = Column(Integer, primary_key=True, index=True)
     user_id         = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    name            = Column(String, nullable=True)
-    gpa             = Column(String, nullable=True)
+    # Fields for applicant profile
+    email          = Column(String, nullable=False)
+    first_name     = Column(String, nullable=True)
+    last_name      = Column(String, nullable=True)
+    phone_number   = Column(String, nullable=True)
+    university      = Column(String, nullable=True)
+    major          = Column(String, nullable=True)
     graduation_date = Column(Date, nullable=True)
-    experience      = Column(Text, nullable=True)
     resume          = Column(String, nullable=True)
 
-    user = relationship("User", back_populates="profile")
+    user = relationship("User", back_populates="applicant_profile")
 
 class Job(Base):
     __tablename__ = "jobs"

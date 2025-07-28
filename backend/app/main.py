@@ -10,6 +10,9 @@ from . import models, schemas, crud, auth
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+@app.get("/") # Root endpoint for testing
+def read_root():
+    return {"Hello": "World"}
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,6 +24,10 @@ app.add_middleware(
 
 # Include auth router (must be after app = FastAPI() but before protected routes)
 app.include_router(auth.router)
+
+# Include other routers
+from . import applicant_profile
+app.include_router(applicant_profile.router)
 
 bearer_scheme = HTTPBearer()
 SECRET_KEY = os.getenv("JWT_SECRET", "changeme")

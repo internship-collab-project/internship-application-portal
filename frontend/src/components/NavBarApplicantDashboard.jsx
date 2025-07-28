@@ -1,5 +1,6 @@
 import {NavLink} from 'react-router-dom';
 import PresidioLogo from '../assets/PresidioLogo.png';
+//import ApplicantProfile from '../pages/ApplicantProfile.jsx';
 const NavBarApplicantDashboard = () => {
 
   return (
@@ -12,7 +13,7 @@ const NavBarApplicantDashboard = () => {
             
             {/* Navigation links on the right */}
             <div className="flex space-x-10">
-                <NavLink className="text-gray-600 hover:text-gray-800 text-lg" to="/applicant-profile">
+                <NavLink className="text-gray-600 hover:text-gray-800 text-lg" to="/applicantProfile">
                     Profile
                 </NavLink>
                 <NavLink className="text-gray-600 hover:text-gray-800 text-lg" to="/internships">

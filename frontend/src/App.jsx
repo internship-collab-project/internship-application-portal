@@ -5,6 +5,7 @@ import ApplicantDashboard from './pages/ApplicantDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import RequireAuth from './components/RequireAuth.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
+import ApplicantProfile from './pages/ApplicantProfile.jsx';
 
 const App = () => {
 
@@ -20,6 +21,7 @@ const App = () => {
         {/* User dashboard */}
         <Route element={<RequireAuth allowedRoles={['applicant']} />}>
           <Route path="/applicantDashboard" element={<ApplicantDashboard />} />
+          <Route path="/applicantProfile" element={<ApplicantProfile />} />
         </Route>
 
         {/* Admin dashboard */}

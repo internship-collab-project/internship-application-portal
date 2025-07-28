@@ -61,6 +61,7 @@ const LoginPage = () => {
             const response = await Axios.post('/login', formData);
             const {accessToken, roles} = response.data;
             login({ email: formData.email, roles, accessToken });
+            localStorage.setItem('applicantEmail', formData.email); //save the applicant's email to localStorage for later use
             setFormData({ email: '', password: '' }); // Clear form after successful login
             if (roles.includes('admin')) {
                 navigate('/adminDashboard'); // Redirect to admin dashboard if user is an admin
