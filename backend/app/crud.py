@@ -39,7 +39,7 @@ def create_applicant_profile(
     university: str,
     major: str,
     graduation_date: date,
-    resume: UploadFile = None
+
 ):
     user = get_user_by_email(db, email) #looks up user by email in database
     if not user:
@@ -63,7 +63,6 @@ def create_applicant_profile(
         university=university,
         major=major,
         graduation_date=graduation_date,
-        resume=None #make None for now, can be updated later with file handling
     )
     db.add(db_profile)
     db.commit()

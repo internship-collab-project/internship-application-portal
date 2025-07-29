@@ -26,7 +26,6 @@ class ApplicantProfile(Base):
     university      = Column(String, nullable=True)
     major          = Column(String, nullable=True)
     graduation_date = Column(Date, nullable=True)
-    resume          = Column(String, nullable=True)
 
     user = relationship("User", back_populates="applicant_profile")
 

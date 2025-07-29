@@ -71,7 +71,6 @@ def update_applicant_profile( #none makes the field optional
     university: str = Form(None),
     major: str = Form(None),
     graduation_date: date = Form(None),
-    resume: UploadFile = File(None),
     db: Session = Depends(get_db)
 ):
     db_profile = db.query(models.ApplicantProfile).filter(models.ApplicantProfile.id == id).first()
@@ -93,9 +92,7 @@ def update_applicant_profile( #none makes the field optional
         db_profile.major = major
     if graduation_date is not None:
         db_profile.graduation_date = graduation_date
-    if resume is not None:
-        # Handle file upload logic here if needed, for now will set to None
-        pass  # Placeholder for file handling logic
+
 
     db.commit()
     db.refresh(db_profile)

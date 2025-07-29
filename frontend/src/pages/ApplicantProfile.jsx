@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import {toast } from 'react-toastify';
 import Axios from '../services/Axios';
 import NavBarApplicantDashboard from '../components/NavBarApplicantDashboard';
 
@@ -12,7 +13,7 @@ const ApplicantProfile = () => {
     university: '',
     major: '',
     graduation_date: '',
-    resume: null,
+    // resume: null,
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -81,7 +82,8 @@ const handleChange = (e) => {  //stores the file in a state variable
     const { name, value, files } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files[0] : value, // Handle file input for resume
+      [name]: value,
+      //[name]: files ? files[0] : value, // Handle file input for resume
     }));
   };
 
@@ -105,13 +107,14 @@ const handleFormSubmit = async (e) => {
 
         // if (formData.resume) {
         //     formDataToSend.append('resume', formData.resume); // Append the resume file if it exists
-        const resumeFile = formData.resume; // Get the resume file from formData
-        if (resumeFile){
-            formDataToSend.append('resume', resumeFile); // Append the resume file if it exists
-        }
+        // const resumeFile = formData.resume; // Get the resume file from formData
+        // if (resumeFile){
+        //     formDataToSend.append('resume', resumeFile); // Append the resume file if it exists
+        // }
         if (profileExists) {
             // Update existing profile
-            await Axios.put(`/applicantProfile/${applicantID}`, formDataToSend);
+            await Axios.put(`/applicantProfile/id/${applicantID}`, formDataToSend);
+            toast.success('Profile updated successfully!'); // Show success message
         } else {
             // Create new profile
             const response = await Axios.post('/applicantProfile', formDataToSend);
@@ -214,7 +217,7 @@ const handleFormSubmit = async (e) => {
                             required
                         />
                     </div>
-                    <div>
+                    {/* <div>
                         <label className="block mb-2">Resume</label>
                         <input
                             type="file"
@@ -224,7 +227,7 @@ const handleFormSubmit = async (e) => {
                             // Only required if creating a new profile
                             required={!profileExists}
                         />
-                    </div>
+                    </div> */}
                 </div>
                 <button
                     type="submit"
