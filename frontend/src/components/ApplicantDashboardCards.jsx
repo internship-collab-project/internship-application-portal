@@ -16,7 +16,7 @@ const ApplicantDashboardCards = () => {
                 <Card>
                 <div className="h-40 flex flex-col justify-center text-center">
                     <h2 className="text-xl font-semibold mb-2">Applications</h2>
-                    <p>View and manage your internship applications.</p>
+                    <p>View the status of your submitted applications.</p>
                     <Link to="/applications" className="text-[#2687AD] hover:underline mt-2 inline-block">Go to Applications</Link>
                 </div>
                 </Card>
