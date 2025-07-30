@@ -6,9 +6,20 @@ from datetime import datetime, date
 class UserBase(BaseModel):
     email: EmailStr
 
-class UserCreate(UserBase):
+# class UserCreate(UserBase):
+#     password: str
+#     admin_code: Optional[str] = None # Used for admin creation, can be None for applicants
+#     role: Optional[str] = "applicant"
+
+class UserCreate(BaseModel):
+    email: EmailStr
     password: str
+    admin_code: Optional[str] = Field(default=None, alias="adminCode")  # alias for frontend compatibility
     role: Optional[str] = "applicant"
+
+    class Config:
+        allow_population_by_field_name = True  # Allow using field name or alias
+
 
 class UserOut(UserBase):
     id: int

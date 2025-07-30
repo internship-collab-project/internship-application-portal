@@ -8,6 +8,9 @@ from . import schemas, crud, models
 from .database import SessionLocal
 from .email_utils import send_email
 
+from dotenv import load_dotenv
+load_dotenv()  # Load environment variables from .env file
+
 SECRET_KEY = os.getenv("JWT_SECRET", "changeme")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
@@ -31,17 +34,26 @@ def get_db():
 def signup(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
     if crud.get_user_by_email(db, user_in.email):
         raise HTTPException(status_code=409, detail="Email already registered")
-    user = crud.create_user(db, user_in)
+    # user = crud.create_user(db, user_in)
 
-    # Send welcome email
-    subject = "Welcome to the Internship Portal"
-    html_content = (
-        f"<p>Hi {user.email},</p>"
-        "<p>Thank you for signing up for our Internship Application Portal. "
-        "You can now log in and submit your application.</p>"
-        "<p>Best regards,<br/>The Team</p>"
-    )
-    send_email(user.email, subject, html_content)
+    # # Send welcome email
+    # subject = "Welcome to the Internship Portal"
+    # html_content = (
+    #     f"<p>Hi {user.email},</p>"
+    #     "<p>Thank you for signing up for our Internship Application Portal. "
+    #     "You can now log in and submit your application.</p>"
+    #     "<p>Best regards,<br/>The Team</p>"
+    # )
+    # send_email(user.email, subject, html_content)
+
+    #determine user role based on admin code
+    admin_code_env = os.getenv("ADMIN_CODE")
+    # if user_in.admin_code == admin_code_env:
+    #     user.role = "admin"
+    # role = "admin" if user_in.admin_code == admin_code_env else "applicant"
+    role = "admin" if (user_in.admin_code or "").strip() == (admin_code_env or "").strip() else "applicant" #helps get rid of any leading/trailing whitespace
+
+    user = crud.create_user(db, user_in, role_override=role)
 
     return user
 

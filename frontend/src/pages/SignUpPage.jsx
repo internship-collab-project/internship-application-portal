@@ -4,6 +4,7 @@ import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import Axios from '../services/Axios';
+import { toast } from 'react-toastify';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$/; //will be validating components with these fields
@@ -60,11 +61,21 @@ const SignUpPage = () => {
             return;
         }
         try {
-            const response = await Axios.post("signup", {
+            const response = await Axios.post("/signup", {
                 email,
                 password,
                 adminCode: adminCode.trim()
             });
+
+            // Show notification based on role
+            if (response.data && response.data.role) {
+                if (response.data.role === "admin") {
+                    toast.success("Account created as ADMIN!", { autoClose: 3000 });
+                } else {
+                    toast.info("Account created as applicant.", { autoClose: 3000 });
+                }
+            }
+
             setEmail('');
             setPassword('');
             setMatchPassword('');
@@ -79,6 +90,9 @@ const SignUpPage = () => {
             } else {
                 setErrMsg("Registration Failed");
             }
+            if (errRef.current) {
+                errRef.current.focus(); // Focus on the error message reference if you have one to have a screen reader read it
+            }
         }
     };
 
@@ -86,14 +100,17 @@ const SignUpPage = () => {
         <>
         <NavBarLogin />
         <section className="min-h-screen flex items-center justify-center bg-white py-12 px-6 sm:px-6 lg:px-8">
-            {/* will display an error message if there is one */}
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p> 
-            <div className="w-[500px] h-[500px] p-8 shadow-lg bg-[#E8F0F5] rounded-md">
+            <div className="w-[500px] h-[650px] p-8 shadow-lg bg-[#E8F0F5] rounded-md">
             <div className="max-w-md w-full space-y-8"> 
                 <div>
-                    <h1 className="mt-6 text-center block text-3xl text-gray-900">
+                    <h1 className="mt-6 mb-3 text-center block text-3xl text-gray-900">
                         Sign Up
                     </h1>
+                    {errMsg && (
+                        <div ref={errRef} className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                            {errMsg}
+                        </div>
+                    )}
                 </div>
                 <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                     <div>

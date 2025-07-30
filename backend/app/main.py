@@ -6,6 +6,9 @@ import jwt, os
 from .database import Base, engine
 from . import models, schemas, crud, auth
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Create tables
 Base.metadata.create_all(bind=engine)
 

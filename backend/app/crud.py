@@ -4,15 +4,17 @@ from passlib.context import CryptContext
 from . import models, schemas
 from fastapi import UploadFile
 from datetime import date
+from typing import Optional
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
-def create_user(db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: schemas.UserCreate, role_override: Optional[str] = None):
     hashed_pw = pwd_context.hash(user.password)
-    db_user = models.User(email=user.email, password=hashed_pw, role=user.role)
+    role = role_override or user.role
+    db_user = models.User(email=user.email, password=hashed_pw, role=role)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
